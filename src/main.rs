@@ -2,6 +2,7 @@ use std::env;
 
 use argh::FromArgs;
 use anyhow::{Result, bail};
+use either::Either;
 use itertools::Itertools;
 use regex::Regex;
 
@@ -76,19 +77,19 @@ fn main() -> Result<()> {
         }
     };
 
-    // Print the desired entries
+    // Generate an iterator that does what the user wants
     let entries = var_contents.iter()
         .flat_map(|c| c.split(args.sep))
         .filter(|x| regex.is_match(&x));
 
-    if args.unique {
-        for entry in entries.unique() {
-            println!("{entry}");
-        }
-    } else {
-        for entry in entries {
-            println!("{entry}");
-        }
+    let entries = match args.unique {
+        true => Either::Left(entries.unique()),
+        false => Either::Right(entries),
+    };
+
+    // Print the desired entries
+    for entry in entries {
+        println!("{entry}");
     }
 
     Ok(())

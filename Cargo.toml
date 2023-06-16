@@ -8,8 +8,9 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.71"
 argh = "0.1.10"
-regex = "1.8.4"
+either = "1.8.1"
 itertools = "0.10.5"
+regex = "1.8.4"
 
 [profile.release]
 opt-level = "z"
